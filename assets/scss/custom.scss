@@ -236,21 +236,25 @@ tab-container[type=pill] > .tab-button[aria-selected=true] {
 }
 
 /* ========================================================= *
- * Edge pattern: checkerboard strips along the screen edges.
+ * Edge pattern: checkerboard strips along the screen edges,
+ * pinned to the window (they do not scroll with the page).
  * ========================================================= */
 
 /* Each strip stacks one start cap, as many full repeat tiles
-   as fit, and one end cap at the bottom; the leftover below
-   the end cap is always shorter than a single image. */
+   as fit, and one end cap at the bottom of the window; the
+   leftover below the end cap is always shorter than a single
+   image. */
 @media (min-width: 680px) {
   #{'body:not(:has(.page.single:not(.search):not(.friends)))'} {
-    /* anchor the strips to the page box so they scroll with it */
+    /* stacking context: keeps the strips above the white body
+       background but behind all page content */
     position: relative;
     z-index: 0;
     &::before,
     &::after {
       content: '';
-      position: absolute;
+      /* pinned to the window, so the pattern never scrolls */
+      position: fixed;
       /* start below the sticky header, so the start cap is visible */
       top: var(--fi-header-height);
       /* above the white page background, behind all content */
@@ -260,7 +264,8 @@ tab-container[type=pill] > .tab-button[aria-selected=true] {
       width: 4.5rem; /* 90 physical px at 125% OS scaling */
       /* reserve the cap zones; repeat tiles only fill the middle */
       padding: 1.8rem 0; /* 36 physical px image height */
-      /* full-tile stack height: start + N * repeat + end */
+      /* window-tall stack: start + N * repeat + end; percentage
+         heights of fixed elements resolve against the window */
       height: #{'calc(100% - var(--fi-header-height))'};
       height: #{'calc(3.6rem + round(down, calc(100% - var(--fi-header-height) - 3.6rem), 1.8rem))'};
       /* default smooth (bilinear) scaling with anti-aliasing */
