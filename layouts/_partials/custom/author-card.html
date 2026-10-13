@@ -1,0 +1,32 @@
+{{- /*
+  GitHub author card for the right sidebar, rendered above the table of contents.
+  Registered in params.custom_partials.post_toc_before.
+  Modeled after the FixIt docs site's custom/follow-me.html: shows the GitHub
+  name and avatar from params.social.GitHub, plus a Follow button.
+*/ -}}
+{{- $github := .Site.Params.social.GitHub -}}
+{{- $author := partial "function/get-author-map.html" .Params.author -}}
+{{- if or $github $author.name -}}
+  {{- /* GitHub profile display name, falling back to the login, then the site author */ -}}
+  {{- $name := $author.github_name | default ($github | default $author.name) -}}
+  {{- $avatar := $author.avatar | relURL -}}
+  {{- $link := $author.link -}}
+  {{- if $github -}}
+    {{- $avatar = printf "https://github.com/%v.png?size=68" $github -}}
+    {{- $link = printf "https://github.com/%v" $github -}}
+  {{- end -}}
+  <div class="author-card">
+    <div class="author-card-row">
+      <a href="{{ $link }}" class="author-link" target="_blank" rel="external">
+        <img src="{{ $avatar }}" alt="{{ $name }}" class="author-avatar" width="34" height="34">
+        <span class="author-name">{{ $name }}</span>
+      </a>
+      {{- with $github -}}
+        <a href="{{ printf "https://github.com/%v" . }}" class="follow-btn" target="_blank" rel="external" title="{{ T "follow.title" }}">
+          <i class="fa-brands fa-github fa-fw" aria-hidden="true"></i> {{ T "follow.btn" }}
+        </a>
+      {{- end -}}
+    </div>
+    <hr class="author-card-sep">
+  </div>
+{{- end -}}

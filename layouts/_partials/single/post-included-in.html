@@ -1,0 +1,42 @@
+{{- /*
+  Post collections display partial.
+
+  Renders collection links with icons for the current page only;
+  ancestor folders are deliberately omitted (they live in the
+  breadcrumb and on the Directories page).
+
+  PROJECT OVERRIDE of the FixIt single/post-included-in.html partial.
+  The theme hardcodes the "categories" taxonomy; this version shows
+  collections only.
+
+  After a FixIt update, diff this file against the theme version and
+  re-apply the local changes marked with "fixit-override:".
+*/ -}}
+
+{{- $collections := slice -}}
+{{- range .GetTerms "collections" -}}
+  {{- $collections = $collections | append (
+    printf `<a href="%v" class="post-collection" title="%v">%v %v</a>`
+    (partial "function/escapeurl.html" .RelPermalink)
+    (printf "%v - %v" (T "collection") .LinkTitle)
+    (dict "Class" "fa-solid fa-layer-group" | partial "plugin/icon.html")
+    .LinkTitle
+  ) -}}
+{{- end -}}
+
+{{- /* fixit-override: collections only, joined with "and" */ -}}
+{{- $n := len $collections -}}
+{{- $collectionStr := "" -}}
+{{- if le $n 1 -}}
+  {{- $collectionStr = delimit $collections "" -}}
+{{- else if eq $n 2 -}}
+  {{- $collectionStr = printf "%v and %v" (index $collections 0) (index $collections 1) -}}
+{{- else -}}
+  {{- $collectionStr = printf "%v and %v" (delimit (first (sub $n 1) $collections) ", ") (index $collections (sub $n 1)) -}}
+{{- end -}}
+
+{{- with $collections -}}
+  <span class="post-included-in">
+    &nbsp;{{- dict "Collections" $collectionStr | T "single.includedIn.collections" | safeHTML -}}
+  </span>
+{{- end -}}

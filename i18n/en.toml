@@ -1,0 +1,14 @@
+# For translations of pages, you can set `translationKey` in Front Matter
+# https://gohugo.io/content-management/multilingual/#translation-of-strings
+
+[follow]
+btn = "Follow"
+title = "Follow me on GitHub!"
+
+# Taxonomy titles for the renamed "directories" taxonomy
+# (FixIt's taxonomy.html/term.html fall back to these keys via T).
+[directory]
+other = "Directory"
+
+[directories]
+other = "Directories"

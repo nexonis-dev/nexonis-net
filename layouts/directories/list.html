@@ -1,0 +1,32 @@
+{{- /*
+  Directories page: FixIt-style taxonomy cards built from the section tree.
+
+  Renders the "Directories" heading plus one card per root folder listed
+  in params.directory_roots (and its nested subfolders), using the
+  theme's taxonomy-cards markup so the card CSS applies as-is. Posts are
+  collected recursively from each folder's subtree.
+*/ -}}
+
+{{- define "title" -}}
+  {{- .Params.Title | default (T "directories") | default "Directories" -}}
+  {{- if .Site.Params.with_site_title }} {{ .Site.Params.title_delimiter }} {{ .Site.Title }}{{- end -}}
+{{- end -}}
+
+{{- define "content" -}}
+  {{- $roots := .Site.Params.directory_roots | default slice -}}
+  <div class="page archive">
+    {{- /* Title */}}
+    <h1 class="single-title animate__animated animate__pulse animate__faster">
+      {{- dict "Class" "fa-solid fa-folder-tree me-1" | partial "plugin/icon.html" -}}
+      {{- .Params.Title | default (T "directories") | default "Directories" }}
+    </h1>
+    {{- /* One card per configured root folder, then its subfolders */}}
+    <div class="taxonomy-cards directories">
+      {{- range $roots -}}
+        {{- with $.Site.GetPage (printf "/%v" .) -}}
+          {{- partial "section-tree-card.html" (dict "section" . "path" "") -}}
+        {{- end -}}
+      {{- end -}}
+    </div>
+  </div>
+{{- end -}}

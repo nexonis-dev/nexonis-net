@@ -1,0 +1,40 @@
+{{- /*
+  Taxonomy list page (heading above the term cards, e.g. /collections/).
+
+  PROJECT OVERRIDE of the FixIt layouts/taxonomy.html. The collections
+  page is shown without the "All" prefix and without the total count,
+  matching the Directories page; the tags page keeps the theme's
+  rendering. After a FixIt update, diff this file against the theme
+  version and re-apply the local changes marked with "fixit-override:".
+*/ -}}
+
+{{- define "title" -}}
+  {{- if eq .Data.Plural "collections" -}}
+    {{- /* fixit-override: no "All" prefix for collections */ -}}
+    {{- .Params.Title | default (T .Data.Plural) | default .Data.Plural -}}
+  {{- else -}}
+    {{- .Params.Title | default (T .Data.Plural) | default .Data.Plural | dict "Some" | T "allSome" -}}
+  {{- end -}}
+  {{- if .Site.Params.with_site_title }} {{ .Site.Params.title_delimiter }} {{ .Site.Title }}{{- end -}}
+{{- end -}}
+
+{{- define "content" -}}
+  {{- $taxonomies := .Data.Plural -}}
+  {{- $icon := .Params.titleIcon | default (dict "Taxonomy" .Data.Singular "Slot" "title" | partial "function/get-taxonomy-icon.html") -}}
+
+  <div class="page archive">
+    {{- /* Title */ -}}
+    <h1 class="single-title animate__animated animate__pulse animate__faster">
+      {{- dict "Class" (add $icon " me-1") | partial "plugin/icon.html" -}}
+      {{- if eq $taxonomies "collections" -}}
+        {{- /* fixit-override: no "All" prefix, no total count */ -}}
+        {{- .Params.Title | default (T $taxonomies) | default $taxonomies }}
+      {{- else -}}
+        {{- .Params.Title | default (T $taxonomies) | default $taxonomies | dict "Some" | T "allSome" }} <sup>{{ len .Data.Terms.ByCount }}</sup>
+      {{- end -}}
+    </h1>
+    {{- /* Render different taxonomies */ -}}
+    {{- $template := cond ( eq $taxonomies "tags") "tags" "taxonomies" -}}
+    {{- .Render $template -}}
+  </div>
+{{- end -}}

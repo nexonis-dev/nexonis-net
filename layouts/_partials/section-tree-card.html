@@ -1,0 +1,46 @@
+{{- /*
+  Recursive section-tree card for the Directories page.
+
+  Renders one FixIt taxonomy-style card per non-empty section, then
+  recurses into subsections. Receives a dict:
+    "section" - section page to render
+    "path"    - breadcrumb-style prefix, e.g. "Journal / Releases"
+*/ -}}
+{{- $section := .section -}}
+{{- $path := .path -}}
+{{- $title := $section.LinkTitle -}}
+{{- $pages := $section.RegularPagesRecursive.ByDate.Reverse -}}
+{{- if $pages -}}
+<div class="card-item">
+  <div class="card-item-wrapper">
+    <h2 class="card-item-title">
+      <a href="{{ $section.RelPermalink }}">
+        {{- dict "Class" "fa-regular fa-folder me-1" | partial "plugin/icon.html" -}}
+        {{- $title }}
+      </a>
+      {{- with $path }}<div class="card-item-path"><small>{{ . }}</small></div>{{ end -}}
+    </h2>
+    {{- range first 5 $pages }}
+    <article class="archive-item">
+      <a href="{{ .RelPermalink }}" class="archive-item-link">
+        {{- $repost := .Params.repost | default dict -}}
+        {{- if eq $repost.enable true -}}
+          {{- dict "Class" "fa-solid fa-retweet text-success me-1" | partial "plugin/icon.html" -}}
+        {{- end -}}
+        {{- cond (.Param "capitalize_titles") (title .LinkTitle) .LinkTitle -}}
+      </a>
+    </article>
+    {{- end }}
+    {{- if gt (len $pages) 5 }}
+    <div class="more-post">
+      <a href="{{ $section.RelPermalink }}" class="more-single-link">{{ T "pagination.more" }} >></a>
+    </div>
+    {{- end }}
+  </div>
+</div>
+{{- end -}}
+{{- $childPath := $title -}}
+{{- with $path }}{{ $childPath = printf "%v / %v" . $title }}{{ end -}}
+{{- range $section.Sections.ByTitle -}}
+  {{- partial "section-tree-card.html" (dict "section" . "path" $childPath) -}}
+{{- end -}}

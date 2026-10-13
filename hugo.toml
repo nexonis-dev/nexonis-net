@@ -15,6 +15,269 @@ capitalizeListTitles = false
 mainSections = ["journal"]
 newContentEditor = "code"
 
+# Inherit FixIt's markup/outputs configuration
+# (required - enables archives, search, and PWA).
+[markup]
+_merge = "shallow"
+[outputs]
+_merge = "shallow"
+
+# Taxonomies: only tags and collections. The former "categories" taxonomy
+# is replaced by the section-tree Directories page (content/directories/,
+# layouts/directories/list.html) which mirrors the folder structure.
+[taxonomies]
+_merge = "none"
+tag = "tags"
+collection = "collections"
+
+# Main menu. Site entries override FixIt's default menu items.
+
+[[menus.main]]
+identifier = "projects"
+name = "My Projects"
+url = "projects/"
+weight = 1
+[menus.main.params]
+# Font Awesome class (https://fontawesome.com/icons).
+icon = "fa-solid fa-sd-card"
+
+[[menus.main]]
+identifier = "journal"
+name = "Journal"
+url = "journal/"
+weight = 2
+[menus.main.params]
+# Font Awesome class (https://fontawesome.com/icons).
+icon = "fa-solid fa-book-bookmark"
+
+[[menus.main]]
+identifier = "bbs-profile"
+name = "BBS Profile"
+url = "https://www.lexaloffle.com/bbs/?uid=122448"
+weight = 3
+[menus.main.params]
+# Custom SVG icon (static/images/picotron.svg).
+icon = "picotron"
+
+[[menus.main]]
+identifier = "games"
+parent = "projects"
+name = "Games"
+url = "games/"
+weight = 1
+[menus.main.params]
+icon = "fa-solid fa-gamepad"
+
+[[menus.main]]
+identifier = "software"
+parent = "projects"
+name = "Software"
+url = "software/"
+weight = 2
+[menus.main.params]
+icon = "fa-regular fa-window-restore"
+
+[[menus.main]]
+identifier = "pixel-art"
+parent = "projects"
+name = "Pixel Art"
+url = "pixel-art/"
+weight = 3
+[menus.main.params]
+icon = "fa-solid fa-pencil"
+
+[[menus.main]]
+identifier = "collections"
+parent = "journal"
+name = "Collections"
+url = "collections/"
+weight = 1
+[menus.main.params]
+icon = "fa-solid fa-layer-group"
+
+[[menus.main]]
+identifier = "directories"
+parent = "journal"
+name = "Directories"
+url = "directories/"
+weight = 2
+[menus.main.params]
+icon = "fa-solid fa-folder-tree"
+
+[[menus.main]]
+identifier = "tags"
+parent = "journal"
+name = "All Tags"
+url = "tags/"
+weight = 3
+[menus.main.params]
+icon = "fa-solid fa-tags"
+
+# Dark and auto modes are disabled site-wide.
+[params]
+default_theme = "light"
+
+# Sidebar collection window + collection prev/next at the end.
+collection_list = true
+collection_navigation = true
+
+# Top-level folders rendered as cards on the Directories page.
+# Subfolders nested inside each root appear automatically.
+directory_roots = ["journal", "pixel-art"]
+
+[params.appearance]
+header_background_color = "#FFFFFF"
+global_link_hover_color = "#E26B02"
+single_link_color = "#C45C00"
+single_link_color_dark = "#E26B02"
+single_link_hover_color = "#E26B02"
+selection_color = "rgba(226, 107, 2, 0.25)"
+
+# Header bar title (applied only on the homepage).
+[params.header.title]
+name = "Nexonis"
+
+# Windows start-tile color, theme default is blue.
+[params.app]
+tile_color = "#E26B02"
+# Footer: hide "Powered by Hugo | Theme - FixIt".
+[params.footer.powered]
+enable = false
+
+# Post footer: hide the "Read Markdown | Open in editor" links
+# and the social icons — the whole second line under the post.
+[params.post_link]
+markdown = false
+source = false
+edit = false
+report = false
+editor = ""
+
+# Social share buttons in the post footer.
+[params.share]
+enable = false
+
+# Author (homepage avatar + post author info).
+[params.author]
+name = "Nexonis Studios"
+# GitHub profile display name (the "name" field, not the login) shown
+# in the right-sidebar author card; falls back to params.social.GitHub.
+github_name = "Nex"
+avatar = "/images/avatar.png"
+link = "https://github.com/nexonis-dev"
+
+# Profile hero (avatar + title + social icons).
+[params.home.profile]
+enable = true
+only_first_page = true
+title = "Nexonis<br>Studios"
+social = true
+
+# No post feed on the homepage.
+[params.home.posts]
+enable = false
+
+# Social links shown in the hero.
+[params.social]
+GitHub = "nexonis-dev"
+Discord = "ari_nex"
+Email = "nexonis@proton.me"
+
+[params.social.YouTube]
+id = "@nexonis"
+prefix = "https://www.youtube.com"
+title = "YouTube"
+weight = 75
+[params.social.YouTube.icon]
+class = "fa-brands fa-youtube"
+
+[params.social.Newgrounds]
+id = "ari-nex"
+template = "https://%v.newgrounds.com"
+title = "Newgrounds"
+weight = 76
+[params.social.Newgrounds.icon]
+simpleicons = "newgrounds"
+
+# Breadcrumbs: folder path under the header.
+[params.breadcrumb]
+enable = true
+
+# Right sidebar: table of contents on single posts.
+[params.toc]
+enable = true
+keep_static = false
+auto = true
+position = "end"
+ordered = false
+start_level = 2
+end_level = 6
+decrease_h1 = false
+
+# Related content: on left sidebar and bottom of the post.
+[params.related]
+enable = true
+count = 5
+position = ["aside", "footer"]
+
+# Author card injected above the TOC in the right sidebar.
+[params.custom_partials]
+head = []
+menu_desktop = []
+menu_mobile = []
+profile = []
+aside = []
+comment = []
+footer = []
+widgets = []
+assets = []
+post_toc_before = ["custom/author-card.html"]
+post_toc_after = []
+post_content_before = []
+post_content_after = []
+post_footer_before = []
+post_footer_after = []
+
+# The theme ships these too, but theme components may only configure
+# params/menus/outputformats/mediatypes, so define them at project level.
+[related]
+includeNewer = true
+threshold = 80
+toLower = false
+
+[[related.indices]]
+applyFilter = false
+cardinalityThreshold = 0
+name = "keywords"
+pattern = ""
+toLower = false
+type = "basic"
+weight = 100
+
+[[related.indices]]
+applyFilter = false
+cardinalityThreshold = 0
+name = "date"
+pattern = ""
+toLower = false
+type = "basic"
+weight = 10
+
+[[related.indices]]
+applyFilter = false
+cardinalityThreshold = 0
+name = "tags"
+pattern = ""
+toLower = false
+type = "basic"
+weight = 80
+
+[[related.indices]]
+applyFilter = false
+name = "fragmentrefs"
+type = "fragments"
+weight = 80
+
 [module]
 [[module.imports]]
 path = "github.com/hugo-fixit/FixIt"

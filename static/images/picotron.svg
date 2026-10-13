@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 320">
+  <g stroke-width="0" transform="matrix(1, 0, 0, 1, -15, -15)">
+    <path d="M35 75v40h160v80h120V75h-40V35H35zm240 60v20h-40v-40h40z"/>
+    <path d="M35 215v60h40v40h240v-80H155v-80H35zm80 0v20H75v-40h40z"/>
+  </g>
+</svg>

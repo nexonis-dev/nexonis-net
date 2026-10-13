@@ -1,0 +1,48 @@
+{{- /*
+  Taxonomies Page (term cards under a taxonomy list page).
+
+  PROJECT OVERRIDE of the FixIt layouts/taxonomies.html: per-card post
+  counts removed to match the Directories page. On this site only the
+  collections taxonomy renders through this template (tags use
+  layouts/tags.html). After a FixIt update, diff this file against the
+  theme version and re-apply the local changes marked with
+  "fixit-override:".
+*/ -}}
+{{- $icon := .Params.cardIcon | default (dict "Taxonomy" .Data.Singular "Slot" "card" | partial "function/get-taxonomy-icon.html") -}}
+
+<div class="taxonomy-cards {{ .Data.Plural }}">
+  {{- range .Data.Terms.ByCount -}}
+    {{- $term := .Term -}}
+    {{- $pages := .Pages -}}
+    {{- with $.Site.GetPage "taxonomy" (printf "%v/%v" $.Type $term) -}}
+    <div class="card-item">
+      <div class="card-item-wrapper">
+        <h2 class="card-item-title">
+          <a href='{{ partial "function/escapeurl.html" .RelPermalink }}'>
+            {{- dict "Class" (add $icon " me-1") | partial "plugin/icon.html" -}}
+            {{- /* fixit-override: per-card count removed */ -}}
+            {{- .Page.Title }}
+          </a>
+        </h2>
+        {{- range first 5 $pages -}}
+          <article class="archive-item">
+            <a href="{{ .RelPermalink }}" class="archive-item-link">
+              {{- $repost := .Params.repost | default dict -}}
+              {{- if eq $repost.enable true -}}
+                {{- dict "Class" "fa-solid fa-retweet text-success me-1" | partial "plugin/icon.html" -}}
+              {{- end -}}
+              {{- cond (.Param "capitalize_titles") (title .LinkTitle) .LinkTitle -}}
+            </a>
+          </article>
+        {{- end }}
+        {{- if gt (len $pages) 5 -}}
+          <div class="more-post">
+            <a href='{{ partial "function/escapeurl.html" .RelPermalink }}' class="more-single-link">{{ T "pagination.more" }} >></a>
+          </div>
+        {{- end -}}
+      </div>
+    </div>
+    {{- end -}}
+  {{- end -}}
+</div>
+{{- /* EOF */ -}}
